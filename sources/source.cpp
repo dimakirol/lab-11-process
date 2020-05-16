@@ -44,33 +44,33 @@ int main(int argc, char* argv[]) {
             std::string command_3 = "cmake --build _builds --target install";
             std::string command_4 = "cmake --build _builds --target package";
 
-            int res_1 = 0;
-            int res_2 = 0;
+            int resultat_1 = 0;
+            int resultat_2 = 0;
 
             if (config == "Debug" || config == "Release") {
                 command_1 += config;
-                auto t1 = async::spawn([&res_1, config, timeout, &time_spent,
+                auto t1 = async::spawn([&resultat_1, config, timeout, &time_spent,
                                                command_1, command_2]() mutable {
                     time_t start_1 = time_now();
 
-                    create_child(command_1, timeout);
+                    privet_ya_rodilsia(command_1, timeout);
                     time_t end_1 = time_now();
 
                     time_spent += end_1 - start_1;
-                    res_1 = Prob(command_2, res_1, timeout, time_spent);
+                    resultat_1 = ya_nesu_resultat(command_2, resultat_1, timeout, time_spent);
                 });
             }
-            if (vm.count("install") && res_1 == 0) {
-                auto t2 = async::spawn([&res_1, &res_2, command_3,
+            if (vm.count("install") && resultat_1 == 0) {
+                auto t2 = async::spawn([&resultat_1, &resultat_2, command_3,
                                                timeout, &time_spent]() mutable {
-                    res_2 = Prob(command_3, res_1, timeout, time_spent);
+                    resultat_2 = ya_nesu_resultat(command_3, resultat_1, timeout, time_spent);
                 });
                 std::cout << "install" << std::endl;
             }
-            if (vm.count("pack") && res_2 == 0) {
-                auto t3 = async::spawn([&res_2, command_4,
+            if (vm.count("pack") && resultat_2 == 0) {
+                auto t3 = async::spawn([&resultat_2, command_4,
                                         timeout, &time_spent]() mutable {
-                    res_2 = Prob(command_4, res_2, timeout, time_spent);
+                    resultat_2 = ya_nesu_resultat(command_4, resultat_2, timeout, time_spent);
                 });
                 std::cout << "package" << std::endl;
             }
@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
     }
 }
 
-void create_child(const std::string& command, const time_t& period) {
+void privet_ya_rodilsia(const std::string& command, const time_t& period) {
     std::string line;
     ipstream out;
 
@@ -104,7 +104,7 @@ void create_child(const std::string& command, const time_t& period) {
 }
 
 
-void create_child(const std::string& command, const time_t& period, int& res) {
+void privet_ya_rodilsia(const std::string& command, const time_t& period, int& resultat) {
     std::string line;
     ipstream out;
 
@@ -117,7 +117,7 @@ void create_child(const std::string& command, const time_t& period, int& res) {
 
     checkTime.join();
 
-    res = process.exit_code();
+    resultat = process.exit_code();
 }
 
 void check_time(child& process, const time_t& period){
@@ -140,13 +140,13 @@ time_t time_now() {
             std::chrono::system_clock::now());
 }
 
-int Prob(std::string command1, int& res, time_t& timeout, time_t& time_spent) {
+int ya_nesu_resultat(std::string command1, int& resultat, time_t& timeout, time_t& time_spent) {
     time_t period = timeout - time_spent;
     time_t start = time_now();
 
-    create_child(command1, period, res);
+    privet_ya_rodilsia(command1, period, resultat);
     time_t end = time_now();
     time_spent += end - start;
 
-    return res;
+    return resultat;
 }
