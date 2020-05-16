@@ -1,5 +1,8 @@
 # Лабораторная работа 11
+[![Travis][build-badge]][build]
 
+[build-badge]: https://travis-ci.com/dimakirol/lab-11-process.svg?branch=master
+[build]: https://travis-ci.com/github/dimakirol/lab-11-process
 > [Процесс](https://ru.wikipedia.org/wiki/Процесс_(информатика)) — программа, которая выполняется в текущий момент. Стандарт ISO 9000:2000 определяет процесс как совокупность взаимосвязанных и взаимодействующих действий, преобразующих входящие данные в исходящие.
 
 ## Задание
