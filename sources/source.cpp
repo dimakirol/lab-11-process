@@ -49,8 +49,8 @@ int main(int argc, char* argv[]) {
 
             if (config == "Debug" || config == "Release") {
                 command_1 += config;
-                auto t1 = async::spawn([&resultat_1, config, timeout, 
-                                   &time_spent,command_1, command_2]() mutable {
+                auto t1 = async::spawn([&resultat_1, config, timeout,
+                                   &time_spent, command_1, command_2]() mutable {
                     time_t start_1 = time_now();
 
                     people_make_new_people(command_1, timeout);
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
             if (vm.count("install") && resultat_1 == 0) {
                 auto t2 = async::spawn([&resultat_1, &resultat_2, command_3,
                                                timeout, &time_spent]() mutable {
-                    resultat_2 = ya_nesu_resultat(command_3, resultat_1, 
+                    resultat_2 = ya_nesu_resultat(command_3, resultat_1,
                                                   timeout, time_spent);
                 });
                 std::cout << "install" << std::endl;
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
             if (vm.count("pack") && resultat_2 == 0) {
                 auto t3 = async::spawn([&resultat_2, command_4,
                                         timeout, &time_spent]() mutable {
-                    resultat_2 = ya_nesu_resultat(command_4, resultat_2, 
+                    resultat_2 = ya_nesu_resultat(command_4, resultat_2,
                                                   timeout, time_spent);
                 });
                 std::cout << "package" << std::endl;
@@ -98,7 +98,6 @@ void people_make_new_people(const std::string& command,
     ipstream out;
 
     child process(command, std_out > out);
-
     std::thread checkTime(check_time, std::ref(process), std::ref(period));
 
     while (out && std::getline(out, line) && !line.empty())
