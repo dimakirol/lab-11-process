@@ -49,28 +49,31 @@ int main(int argc, char* argv[]) {
 
             if (config == "Debug" || config == "Release") {
                 command_1 += config;
-                auto t1 = async::spawn([&resultat_1, config, timeout, &time_spent,
-                                               command_1, command_2]() mutable {
+                auto t1 = async::spawn([&resultat_1, config, timeout, 
+                                   &time_spent,command_1, command_2]() mutable {
                     time_t start_1 = time_now();
 
-                    privet_ya_rodilsia(command_1, timeout);
+                    people_make_new_people(command_1, timeout);
                     time_t end_1 = time_now();
 
                     time_spent += end_1 - start_1;
-                    resultat_1 = ya_nesu_resultat(command_2, resultat_1, timeout, time_spent);
+                    resultat_1 = ya_nesu_resultat(command_2, resultat_1, 
+                                                  timeout, time_spent);
                 });
             }
             if (vm.count("install") && resultat_1 == 0) {
                 auto t2 = async::spawn([&resultat_1, &resultat_2, command_3,
                                                timeout, &time_spent]() mutable {
-                    resultat_2 = ya_nesu_resultat(command_3, resultat_1, timeout, time_spent);
+                    resultat_2 = ya_nesu_resultat(command_3, resultat_1, 
+                                                  timeout, time_spent);
                 });
                 std::cout << "install" << std::endl;
             }
             if (vm.count("pack") && resultat_2 == 0) {
                 auto t3 = async::spawn([&resultat_2, command_4,
                                         timeout, &time_spent]() mutable {
-                    resultat_2 = ya_nesu_resultat(command_4, resultat_2, timeout, time_spent);
+                    resultat_2 = ya_nesu_resultat(command_4, resultat_2, 
+                                                  timeout, time_spent);
                 });
                 std::cout << "package" << std::endl;
             }
@@ -89,7 +92,8 @@ int main(int argc, char* argv[]) {
     }
 }
 
-void privet_ya_rodilsia(const std::string& command, const time_t& period) {
+void people_make_new_people(const std::string& command,
+                            const time_t& period) {
     std::string line;
     ipstream out;
 
@@ -104,7 +108,8 @@ void privet_ya_rodilsia(const std::string& command, const time_t& period) {
 }
 
 
-void privet_ya_rodilsia(const std::string& command, const time_t& period, int& resultat) {
+void people_make_new_people(const std::string& command, 
+                        const time_t& period, int& resultat) {
     std::string line;
     ipstream out;
 
