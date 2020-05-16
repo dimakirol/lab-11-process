@@ -5,20 +5,21 @@
 
 
 int main(int argc, char* argv[]) {
-
-
     options_description desc("Allowed options");
     desc.add_options()
             ("help", "выводим вспомогательное сообщение")
-            ("config", value<std::string>(), "указываем конфигурацию сборки (по умолчанию Debug)")
-            ("install", "добавляем этап установки (в директорию _install)")
-            ("pack", "добавляем этап упаковки (в архив формата tar.gz)")
-            ("timeout", value<time_t>(), "указываем время ожидания (в секундах)")
-            ;
+            ("config", value<std::string>(),
+               "указываем конфигурацию сборки (по умолчанию Debug)")
+            ("install",
+          		"добавляем этап установки (в директорию _install)")
+            ("pack",
+            		"добавляем этап упаковки (в архив формата tar.gz)")
+            ("timeout", value<time_t>(),
+                    "указываем время ожидания (в секундах)");
 
     variables_map vm;
     try {
-    	system("rm -rf *");
+        system("rm -rf *");
 
         store(parse_command_line(argc, argv, desc), vm);
 
@@ -27,8 +28,7 @@ int main(int argc, char* argv[]) {
             && !vm.count("timeout") && !vm.count("install")) {
             std::cout << desc << "\n";
             return success;
-        }
-        else {
+        } else {
             std::string config = "Debug";
             time_t timeout = time_now();
             time_t time_spent = 0;
@@ -41,11 +41,10 @@ int main(int argc, char* argv[]) {
             }
 
             std::string command_1 = "cmake -H. -B_build -DCMAKE_INSTALL_" +
-                                    std::string("PREFIX=_install -DCMAKE_BUILD_TYPE=");
+                       std::string("PREFIX=_install -DCMAKE_BUILD_TYPE=");
             std::string command_2 = "cmake --build _build";
             std::string command_3 = "cmake --build _build --target install";
             std::string command_4 = "cmake --build _build --target package";
-
 
             int res_1 = 0;
             int res_2 = 0;
@@ -72,15 +71,13 @@ int main(int argc, char* argv[]) {
                 std::cout << "install" << std::endl;
             }
             if (vm.count("pack") && res_2 == 0) {
-                auto t3 = async::spawn([&res_2, command_4, timeout, &time_spent]() mutable {
+                auto t3 = async::spawn([&res_2, command_4,
+										timeout, &time_spent]() mutable {
                     res_2 = Prob(command_4, res_2, timeout, time_spent);
                 });
                 std::cout << "package" << std::endl;
             }
-
-
         }
-
     }
 
     catch (boost::program_options::error & e) {
@@ -89,7 +86,8 @@ int main(int argc, char* argv[]) {
         return error_in_command_line;
     }
     catch (std::exception & e) {
-        std::cerr << "Unhandled Exception reached the top of main: "<<e.what()<<", application will now exit" << std::endl;
+        std::cerr << "Unhandled Exception reached the top of main: "
+                  << e.what() << ", application will now exit" << std::endl;
         return error_unhandled_exeption;
     }
 
@@ -135,8 +133,7 @@ void check_time(child& process, const time_t& period){
             process.terminate(ec);
             std::cout << ec;
             break;
-        }
-        else if (!process.running()) {
+        } else if (!process.running()) {
             break;
         }
     }
@@ -144,12 +141,10 @@ void check_time(child& process, const time_t& period){
 
 time_t time_now() {
     return std::chrono::system_clock::to_time_t(
-            std::chrono::system_clock::now()
-    );
+            std::chrono::system_clock::now());
 }
 
 int Prob(std::string command1, int& res, time_t& timeout, time_t& time_spent) {
-
     time_t period = timeout - time_spent;
     time_t start = time_now();
 
