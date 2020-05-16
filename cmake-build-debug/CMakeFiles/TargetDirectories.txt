@@ -1,3 +1,4 @@
 /home/kirill/Documents/4_semestr/lab-11-process/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/kirill/Documents/4_semestr/lab-11-process/cmake-build-debug/CMakeFiles/test.dir
 /home/kirill/Documents/4_semestr/lab-11-process/cmake-build-debug/CMakeFiles/lab_11.dir
 /home/kirill/Documents/4_semestr/lab-11-process/cmake-build-debug/CMakeFiles/edit_cache.dir

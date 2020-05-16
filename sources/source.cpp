@@ -11,9 +11,9 @@ int main(int argc, char* argv[]) {
             ("config", value<std::string>(),
                "указываем конфигурацию сборки (по умолчанию Debug)")
             ("install",
-          		"добавляем этап установки (в директорию _install)")
+                 "добавляем этап установки (в директорию _install)")
             ("pack",
-            		"добавляем этап упаковки (в архив формата tar.gz)")
+                 "добавляем этап упаковки (в архив формата tar.gz)")
             ("timeout", value<time_t>(),
                     "указываем время ожидания (в секундах)");
 
@@ -50,7 +50,6 @@ int main(int argc, char* argv[]) {
             int res_2 = 0;
 
             if (config == "Debug" || config == "Release") {
-
                 command_1 += config;
                 auto t1 = async::spawn([&res_1, config, timeout, &time_spent,
                                                command_1, command_2]() mutable {
@@ -72,7 +71,7 @@ int main(int argc, char* argv[]) {
             }
             if (vm.count("pack") && res_2 == 0) {
                 auto t3 = async::spawn([&res_2, command_4,
-										timeout, &time_spent]() mutable {
+                                        timeout, &time_spent]() mutable {
                     res_2 = Prob(command_4, res_2, timeout, time_spent);
                 });
                 std::cout << "package" << std::endl;
@@ -90,7 +89,6 @@ int main(int argc, char* argv[]) {
                   << e.what() << ", application will now exit" << std::endl;
         return error_unhandled_exeption;
     }
-
 }
 
 void create_child(const std::string& command, const time_t& period) {

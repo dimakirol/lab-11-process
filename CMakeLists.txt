@@ -43,3 +43,15 @@ target_include_directories(Log
 
 target_link_libraries(lab_11 Boost::program_options Async++::Async++ Boost::system Boost::filesystem Boost::regex)
 target_link_libraries(lab_11 header)
+
+enable_testing()
+add_test(NAME unit_tests COMMAND lab_11)
+
+if(BUILD_COVERAGE)
+  set(ENABLE_COVERAGE ON CACHE BOOL "Enable coverage build." FORCE)
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+  find_package(codecov)
+  add_coverage(lab_11)
+  list(APPEND LCOV_REMOVE_PATTERNS "'${PROJECT_SOURCE_DIR}/sources/*'")
+  coverage_evaluate()
+endif()
