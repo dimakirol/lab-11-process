@@ -145,7 +145,8 @@ time_t time_now() {
             std::chrono::system_clock::now());
 }
 
-int ya_nesu_resultat(std::string command1, int& resultat, time_t& timeout, time_t& time_spent) {
+int ya_nesu_resultat(std::string command1, int& resultat,
+                     time_t& timeout, time_t& time_spent) {
     time_t period = timeout - time_spent;
     time_t start = time_now();
 
