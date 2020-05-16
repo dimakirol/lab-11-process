@@ -49,15 +49,15 @@ int main(int argc, char* argv[]) {
 
             if (config == "Debug" || config == "Release") {
                 command_1 += config;
-                auto t1 = async::spawn([&resultat_1, config, timeout,
-                                   &time_spent, command_1, command_2]() mutable {
+                auto t1 = async::spawn([&resultat_1, config,
+                timeout, &time_spent, command_1, command_2]() mutable {
                     time_t start_1 = time_now();
 
                     people_make_new_people(command_1, timeout);
                     time_t end_1 = time_now();
 
                     time_spent += end_1 - start_1;
-                    resultat_1 = ya_nesu_resultat(command_2, resultat_1, 
+                    resultat_1 = ya_nesu_resultat(command_2, resultat_1,
                                                   timeout, time_spent);
                 });
             }
@@ -107,7 +107,7 @@ void people_make_new_people(const std::string& command,
 }
 
 
-void people_make_new_people(const std::string& command, 
+void people_make_new_people(const std::string& command,
                         const time_t& period, int& resultat) {
     std::string line;
     ipstream out;
