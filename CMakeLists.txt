@@ -11,7 +11,7 @@ set(
         CACHE STRING "Default cache server"
 )
 
-include("cmake/HunterGate.cmake")
+include("tools/gate/cmake/HunterGate.cmake")
 include_directories(process/include/boost)
 include_directories(process/include)
 
@@ -31,7 +31,7 @@ add_library(header INTERFACE)
 add_library(Log INTERFACE)
 
 add_executable(lab_11
-        ${CMAKE_CURRENT_SOURCE_DIR}/source.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/sources/source.cpp
         )
 
 target_include_directories(header
