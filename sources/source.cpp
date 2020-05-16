@@ -42,9 +42,9 @@ int main(int argc, char* argv[]) {
 
             std::string command_1 = "cmake -H. -B_build -DCMAKE_INSTALL_" +
                        std::string("PREFIX=_install -DCMAKE_BUILD_TYPE=");
-            std::string command_2 = "cmake --build _build";
-            std::string command_3 = "cmake --build _build --target install";
-            std::string command_4 = "cmake --build _build --target package";
+            std::string command_2 = "cmake --build _builds";
+            std::string command_3 = "cmake --build _builds --target install";
+            std::string command_4 = "cmake --build _builds --target package";
 
             int res_1 = 0;
             int res_2 = 0;
