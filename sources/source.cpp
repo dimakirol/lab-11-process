@@ -2,7 +2,69 @@
 
 #include <header.hpp>
 
+void people_make_new_people(const std::string& command,
+                            const time_t& period) {
+    std::string line;
+    ipstream out;
 
+    child process(command, std_out > out);
+    std::thread checkTime(check_time, std::ref(process), std::ref(period));
+
+    while (out && std::getline(out, line) && !line.empty())
+        std::cerr << line << std::endl;
+
+    checkTime.join();
+}
+
+
+void people_make_new_people(const std::string& command,
+                            const time_t& period, int& resultat) {
+    std::string line;
+    ipstream out;
+
+    child process(command, std_out > out);
+
+    std::thread checkTime(check_time, std::ref(process), std::ref(period));
+
+    while (out && std::getline(out, line) && !line.empty())
+        std::cerr << line << std::endl;
+
+    checkTime.join();
+
+    resultat = process.exit_code();
+}
+
+void check_time(child& process, const time_t& period){
+    time_t start = time_now();
+
+    while (true) {
+        if ((time_now() - start > period) && process.running()) {
+            std::error_code ec;
+            process.terminate(ec);
+            std::cout << ec;
+            break;
+        } else if (!process.running()) {
+            break;
+        }
+    }
+}
+
+time_t time_now() {
+    return std::chrono::system_clock::to_time_t(
+            std::chrono::system_clock::now());
+}
+
+int ya_nesu_resultat(std::string command1, int& resultat,
+                     time_t& timeout, time_t& time_spent) {
+    time_t period = timeout - time_spent;
+    time_t start = time_now();
+
+    privet_ya_rodilsia(command1, period, resultat);
+    time_t end = time_now();
+    time_spent += end - start;
+
+    return resultat;
+}
 
 int main(int argc, char* argv[]) {
     options_description desc("Allowed options");
@@ -92,66 +154,4 @@ int main(int argc, char* argv[]) {
     }
 }
 
-void people_make_new_people(const std::string& command,
-                            const time_t& period) {
-    std::string line;
-    ipstream out;
 
-    child process(command, std_out > out);
-    std::thread checkTime(check_time, std::ref(process), std::ref(period));
-
-    while (out && std::getline(out, line) && !line.empty())
-        std::cerr << line << std::endl;
-
-    checkTime.join();
-}
-
-
-void people_make_new_people(const std::string& command,
-                        const time_t& period, int& resultat) {
-    std::string line;
-    ipstream out;
-
-    child process(command, std_out > out);
-
-    std::thread checkTime(check_time, std::ref(process), std::ref(period));
-
-    while (out && std::getline(out, line) && !line.empty())
-        std::cerr << line << std::endl;
-
-    checkTime.join();
-
-    resultat = process.exit_code();
-}
-
-void check_time(child& process, const time_t& period){
-    time_t start = time_now();
-
-    while (true) {
-        if ((time_now() - start > period) && process.running()) {
-            std::error_code ec;
-            process.terminate(ec);
-            std::cout << ec;
-            break;
-        } else if (!process.running()) {
-            break;
-        }
-    }
-}
-
-time_t time_now() {
-    return std::chrono::system_clock::to_time_t(
-            std::chrono::system_clock::now());
-}
-
-int ya_nesu_resultat(std::string command1, int& resultat,
-                     time_t& timeout, time_t& time_spent) {
-    time_t period = timeout - time_spent;
-    time_t start = time_now();
-
-    privet_ya_rodilsia(command1, period, resultat);
-    time_t end = time_now();
-    time_spent += end - start;
-
-    return resultat;
-}

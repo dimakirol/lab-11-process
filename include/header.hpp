@@ -27,14 +27,4 @@ namespace
     const size_t error_unhandled_exeption = 2;
 }
 
-void create_child(const std::string& command, const time_t& period);
-
-void create_child(const std::string& command, const time_t& period, int& res);
-
-void check_time(child& process, const time_t& period);
-
-int Prob(std::string command1, int& res, time_t& timeout, time_t& time_spent);
-
-time_t time_now();
-
 #endif // INCLUDE_HEADER_HPP_
