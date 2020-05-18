@@ -15,10 +15,10 @@
 #include <thread>
 #include <chrono>
 
-using namespace boost::asio;
-using namespace boost::process;
-using namespace boost::process::extend;
-using namespace boost::program_options;
+using assio = boost::asio;
+using prrocess =  boost::process;
+using exxtend = boost::process::extend;
+using po = boost::program_options;
 
 namespace
 {

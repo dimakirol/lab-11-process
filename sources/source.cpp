@@ -6,7 +6,7 @@ time_t time_now() {
     return std::chrono::system_clock::to_time_t(
             std::chrono::system_clock::now());
 }
-void check_time(child& process, const time_t& period){
+void check_time(prrocess::child& process, const time_t& period){
     time_t start = time_now();
 
     while (true) {
@@ -23,9 +23,9 @@ void check_time(child& process, const time_t& period){
 void people_make_new_people(const std::string& command,
                             const time_t& period) {
     std::string line;
-    ipstream out;
+    prrocess::ipstream out;
 
-    child process(command, std_out > out);
+    prrocess::child process(command, std_out > out);
     std::thread checkTime(check_time, std::ref(process), std::ref(period));
 
     while (out && std::getline(out, line) && !line.empty())
@@ -36,9 +36,9 @@ void people_make_new_people(const std::string& command,
 void people_make_new_people(const std::string& command,
                             const time_t& period, int& resultat) {
     std::string line;
-    ipstream out;
+    prrocess::ipstream out;
 
-    child process(command, std_out > out);
+    prrocess::child process(command, std_out > out);
 
     std::thread checkTime(check_time, std::ref(process), std::ref(period));
 
@@ -62,7 +62,7 @@ int ya_nesu_resultat(std::string command1, int& resultat,
 }
 
 int main(int argc, char* argv[]) {
-    options_description desc("Allowed options");
+    po::options_description desc("Allowed options");
     desc.add_options()
             ("help", "выводим вспомогательное сообщение")
             ("config", value<std::string>(),
@@ -74,9 +74,9 @@ int main(int argc, char* argv[]) {
             ("timeout", value<time_t>(),
                     "указываем время ожидания (в секундах)");
 
-    variables_map vm;
+    po::variables_map vm;
     try {
-        store(parse_command_line(argc, argv, desc), vm);
+        po::store(po::parse_command_line(argc, argv, desc), vm);
 
 
         if (vm.count("help") && !vm.count("config") && !vm.count("pack")
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
             if (vm.count("timeout")) {
                 timeout = vm["timeout"].as<time_t>();
             }
-            notify(vm);
+            po::notify(vm);
             if (vm.count("config")) {
                 config = vm["config"].as<std::string>();
             }
@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
 
             if (config == "Debug" || config == "Release") {
                 command_1 += config;
-                auto t1 = async::spawn([&resultat_1, config,
+                auto t1 = assio::async::spawn([&resultat_1, config,
                 timeout, &time_spent, command_1, command_2]() mutable {
                     time_t start_1 = time_now();
 
@@ -119,7 +119,7 @@ int main(int argc, char* argv[]) {
                 });
             }
             if (vm.count("install") && resultat_1 == 0) {
-                auto t2 = async::spawn([&resultat_1, &resultat_2, command_3,
+                auto t2 = assio::async::spawn([&resultat_1, &resultat_2, command_3,
                                                timeout, &time_spent]() mutable {
                     resultat_2 = ya_nesu_resultat(command_3, resultat_1,
                                                   timeout, time_spent);
@@ -127,7 +127,7 @@ int main(int argc, char* argv[]) {
                 std::cout << "install" << std::endl;
             }
             if (vm.count("pack") && resultat_2 == 0) {
-                auto t3 = async::spawn([&resultat_2, command_4,
+                auto t3 = assio::async::spawn([&resultat_2, command_4,
                                         timeout, &time_spent]() mutable {
                     resultat_2 = ya_nesu_resultat(command_4, resultat_2,
                                                   timeout, time_spent);
